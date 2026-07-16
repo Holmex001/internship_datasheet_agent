@@ -23,7 +23,7 @@ print("正在从本地加载 PDF 数据手册...")
 
 # 3. 动态读取下载目录下的所有 PDF (假设 PDF 放在上一层的 elecfans/downloads 目录下)
 # 如果路径不对，请根据实际情况修改这个 pdf_dir
-pdf_dir = "../elecfans/downloads"
+pdf_dir = "../datasheets"
 pdf_files = glob.glob(os.path.join(pdf_dir, "*.pdf"))
 
 if not pdf_files:
@@ -35,12 +35,16 @@ for file_path in pdf_files:
     print(f"正在进行OCR读取: {os.path.basename(file_path)}")
 
 
-    loader = UnstructuredPDFLoader(
-        file_path=file_path,
-        mode="single",  # 将整篇文档合并，方便后续的 Recursive 分割
-        strategy="hi_res",  # 开启高精度模式（自动调用 OCR 识别图片里的字）
-        pdf_infer_table_structure=True  # 选填：尝试深度解析表格结构，对芯片手册很有帮助
-    )
+    # loader = UnstructuredPDFLoader(
+    #     file_path=file_path,
+    #     mode="single",  # 将整篇文档合并，方便后续的 Recursive 分割
+    #     strategy="hi_res",  # 开启高精度模式（自动调用 OCR 识别图片里的字）
+    #     pdf_infer_table_structure=True  # 选填：尝试深度解析表格结构，对芯片手册很有帮助
+    # )
+
+    ## 我没得这个，先用下面的生成一下
+
+    loader = PyPDFLoader(file_path=file_path)
     docs = loader.load()
 
     file_name = os.path.basename(file_path)
@@ -77,10 +81,10 @@ vector_store = Chroma.from_documents(
 )
 print("向量数据库构建成功！")
 
-# # 6. 测试检索（验证你的向量库是否能工作）
-# query = "LM337 能用在什么场景？"
-# # 寻找与问题最相关的 2 句话
-# similar_docs = vector_store.similarity_search(query, k=2)
+# 6. 测试检索（验证你的向量库是否能工作）
+query = "OP07 能用在什么场景？"
+# 寻找与问题最相关的 2 句话
+similar_docs = vector_store.similarity_search(query, k=2)
 
 print("\n--- 检索测试结果 ---")
 for i, doc in enumerate(similar_docs):
