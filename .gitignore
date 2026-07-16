@@ -5,3 +5,7 @@
 
 # API配置文件
 .env
+
+# 忽略 Chroma 向量数据库相关文件
+chroma_db/
+datasheet_vector/chroma_db/
