@@ -12,7 +12,8 @@ from datasheet_tools import search_datasheet, download_datasheet
 
 # 导入向量数据库同学的检索函数
 try:
-    from vector_db.database_api import query_vector_db as real_query_vector_db
+    # from vector_db.database_api import query_vector_db as real_query_vector_db
+    from datasheet_vector.database_api import query_vector_db as real_query_vector_db
     DB_AVAILABLE = True
 except ImportError:
     DB_AVAILABLE = False
@@ -165,3 +166,4 @@ def run_chat():
 # ========== 6. 测试入口 ==========
 if __name__ == "__main__":
     run_chat()
+    # print(ask("你好，请问你是谁？", thread_id="test1"))
